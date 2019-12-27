@@ -13,8 +13,10 @@ def index():
 def user(name):
     return render_template('user.html', name=name)
 
-@app.route('/')
-def List():
-    l = [10, 20, 30, 40, 50]
-    for elem in l:
-        return render_template('user.html', comments=l)
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    return render_template('500.html'), 500
