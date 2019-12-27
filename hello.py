@@ -1,15 +1,12 @@
-# A complete flask application
-
-from flask import Flask, request
+# Rendering templates
+from flask import Flask, render_template
 app = Flask(__name__)
 
 @app.route('/')
 def index():
-    # Request context
-    user_agent = request.headers.get('User-Agent')
-    return '<p>Your browser is {}</p>'.format(user_agent)
+    return render_template('index.html')
 
 @app.route('/user/<name>')
 def user(name):
-    return '<h1>Hello, {}!</h1>'.format(name)
+    return render_template('user.html', name=name)
 
