@@ -24,8 +24,7 @@ def index():
     form = NameForm()
     if form.validate_on_submit():
         session['name'] = form.name.data 
-        #form.name.data = ''
-        return redirect(url_for('index'))
+        return redirect(url_for('index'))  # Redirect and user session
     return render_template('index.html', form=form, name=session.get('name'), current_time=datetime.utcnow())
 
 @app.route('/user/<name>')
