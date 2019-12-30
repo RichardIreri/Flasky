@@ -2,6 +2,7 @@
 
 {% block title %}Flasky{% endblock %}
 
+<!--favicon discription-->
 {% block head %}
 {{ super() }}
 <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}"
@@ -10,6 +11,13 @@
     type="image/x-icon">
 {% endblock %}
 
+<!-- Importing the Moment.js library -->
+{% block scripts %}
+{{ super() }}
+{{ moment.include_moment() }}
+{% endblock %}
+
+<!-- Navigation bar-->
 {% block navbar %}
 <div class="navbar navbar-inverse" role="navigation">
     <div class="container">
@@ -32,6 +40,7 @@
 </div>
 {% endblock %}
 
+<!--Content-->
 {% block content %}
 <div class="container">
     {% block page_content %}{% endblock %}
