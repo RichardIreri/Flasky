@@ -60,6 +60,11 @@ def page_not_found(e):
 def internal_server_error(e):
     return render_template('500.html'), 500 
 
+# Adding a shell context
+@app.shell_context_processor
+def make_shell_context():
+    return dict(db=db, Role=Role, User=User)
+
 # Role and user model definition
 class Role(db.Model):
     __tablename__='roles'
