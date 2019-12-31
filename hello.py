@@ -8,19 +8,21 @@ from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 import os
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
 # Application and extensions initializations
 app = Flask(__name__)           # Creating an application instance
 bootstrap = Bootstrap(app)      # Initializing bootstrap
 moment = Moment(app)            # Initializing moment
 db = SQLAlchemy(app)            # Initializing database
+migrate = Migrate(app, db)      # Initializing migrate
 
 basedir = os.path.abspath(os.path.dirname(__name__))
 
 # Configurations(Flask, Extensions and Application)
 app.config['SECRET_KEY'] = 'hard to guess string'
 app.config['SQLALCHEMY_DATABASE_URI'] = \
-    'sqlite:///' + os.path.join(basedir, 'data.sqlite')
+    'sqlite:///' + os.path.join(basedir, 'family.sqlite')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
