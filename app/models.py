@@ -4,6 +4,9 @@ from . import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from . import login_manager
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from flask import current_app
+from . import db
 
 # Role and user model definition
 class Role(db.Model):
@@ -24,7 +27,8 @@ class User(UserMixin,db.Model):
     email = db.Column(db.String(64), unique=True, index=True)
     username = db.Column(db.String(64), unique=True, index=True)
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
-    password_hash = db.Column(db.String(128))      # Password hash attribute to store password hashes
+    password_hash = db.Column(db.String(128))      # Password hash attribute to store password hashes 
+    confirmed = db.Column(db.Boolean, default=False)   # Create a confirmed attribute in the table
 
     # Passward hashing in the user model
     @property
@@ -42,6 +46,23 @@ class User(UserMixin,db.Model):
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))
+
+    # User account confirmation
+    def generate_confirmation_token(self, expiration=3600):
+        s = Serializer(current_app.config['SECRET_KEY'], expiration)
+        return s.dumps({'confirm': self.id}).decode('utf-8')
+
+    def confirm(self, token):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token.encode('utf-8'))
+        except:
+            return False
+        if data.get('confirm') != self.id:
+            return False
+        self.confirmed = True
+        db.session.add(self)
+        return True
 
     # String representation for debugging and testing
     def __repr__(self):
