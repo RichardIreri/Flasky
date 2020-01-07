@@ -7,6 +7,7 @@ from . import login_manager
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask import current_app
 from . import db
+from datetime import datetime
 
 # Permission constants.
 class Permission:
@@ -85,6 +86,12 @@ class User(UserMixin,db.Model):
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     password_hash = db.Column(db.String(128))      # Password hash attribute to store password hashes 
     confirmed = db.Column(db.Boolean, default=False)   # Create a confirmed attribute in the table
+    # User information fields
+    name = db.Column(db.String(64))
+    location = db.Column(db.String(64))
+    about_me = db.Column(db.Text())
+    member_since = db.Column(db.DateTime(), default=datetime.utcnow)
+    last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
 
     # Defining a default role for users
     def __init__(self, **kwargs):
@@ -94,6 +101,12 @@ class User(UserMixin,db.Model):
                 self.role =Role.quary.filter_by(name='Administrator').first()
             if self.role is None:
                 self.role = Role.query.filter_by(default=True).first()
+
+    # Refreshing a user's last visit time.
+    def ping(self):
+        self.last_seen = datetime.utcnow()
+        db.session.add(self)
+        db.session.commit()
 
     # Evaluating whether a user has a given permission.
     def can(self, perm):

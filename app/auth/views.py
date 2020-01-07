@@ -9,6 +9,17 @@ from ..models import User
 from .. import db
 from ..emails import send_email
 
+# Pinging the logged-in-user.
+@auth.before_app_request
+def before_request():
+    if current_user.is_authenticated:
+        current_user.ping()
+        if not current_user.confirmed \
+                and request.endpoint \
+                and request.blueprint != 'auth' \
+                and request.endpoint != 'static':
+            return redirect(url_for('auth.unconfirmed'))
+
 # Filtering the unconfirmed accounts with the before_app_request handler
 @auth.before_app_request
 def before_request():

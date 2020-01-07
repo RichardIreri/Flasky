@@ -2,6 +2,7 @@
 # Routes are imported at the bottom after blue print creation to avoid circular dependancies.
 
 from flask import Blueprint
+from ..models import Permission
 
 main = Blueprint('main', __name__)
 
