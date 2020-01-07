@@ -5,5 +5,9 @@ from flask import Blueprint
 
 main = Blueprint('main', __name__)
 
+@main.app_context_processor
+def inject_permissions():
+    return dict(Permission=Permission)
+    
 # Relative import (current package).
 from . import views, errors   # Importing the routes inorder to associate them with blueprint.
