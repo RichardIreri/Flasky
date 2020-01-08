@@ -1,7 +1,7 @@
 """ Application routes in the main blueprint. """
 
 from datetime import datetime
-from flask import render_template, session, redirect, url_for, current_app, flash, abort
+from flask import render_template, session, redirect, url_for, current_app, flash, abort, request
 from . import main
 from .forms import EditProfileForm, EditProfileAdminForm, PostForm
 from .. import db, mail 
@@ -10,16 +10,6 @@ from ..emails import send_email
 from flask_mail import Message
 from flask_login import login_required, current_user
 from ..decorators import admin_required
-
-#@main.route('/')
-#def notify():
-#    msg = Message('Hey there', sender='balozikeirano@gmail.com',
-#                    recipients=['fiyey36770@wmail1.com', 'richardireri19@gmail.com'])
-    #msg.body = 'Here is the body'
-#    msg.html = '<b>This is a test email sent from richard\'s app. You don\'t have to reply.</b>'
-#    mail.send(msg)
-
-#    return 'Message has been sent'
 
 # Home page route with a blog post
 @main.route('/', methods=['GET', 'POST'])
@@ -31,17 +21,25 @@ def index():
         db.session.add(post)
         db.session.commit()
         return redirect(url_for('.index'))
-    posts = Post.query.order_by(Post.timestamp.desc()).all()
-    return render_template('index.html', form=form, posts=posts)
+    # Paginating the blog post list.
+    page = request.args.get('page', 1, type=int)
+    pagination = Post.query.order_by(Post.timestamp.desc()).paginate(
+        page, per_page=current_app.config['FLASKY_POSTS_PER_PAGE'],
+        error_out=False)
+    posts = pagination.items
+    return render_template('index.html', form=form, posts=posts, pagination=pagination)
 
-# Profile page route with blogs
+# Profile page route with blogs and support pagination
 @main.route('/user/<username>')
 def user(username):
-    user = User.query.filter_by(username=username).first()
-    if user is None:
-        abort(404)
-    posts = user.posts.order_by(Post.timestamp.desc()).all()
-    return render_template('user.html', user=user, posts=posts)
+    user = User.query.filter_by(username=username).first_or_404()
+    page = request.args.get('page', 1, type=int)
+    pagination = user.posts.order_by(Post.timestamp.desc()).paginate(
+        page, per_page=current_app.config['FLASKY_POSTS_PER_PAGE'],
+        error_out=False)
+    posts = pagination.items
+    return render_template('user.html', user=user, posts=posts,
+                           pagination=pagination)
 
 # Edit profile route for regular users
 @main.route('/edit-profile', methods=['GET', 'POST'])
