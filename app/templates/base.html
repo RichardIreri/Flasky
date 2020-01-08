@@ -2,20 +2,12 @@
 
 {% block title %}Flasky{% endblock %}
 
-<!--favicon discription-->
+<!--favicon and avatar discription-->
 {% block head %}
 {{ super() }}
-<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}"
-    type="image/x-icon">
-<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}"
-    type="image/x-icon">
-{% endblock %}
-
-<!-- Importing the Moment.js library -->
-{% block scripts %}
-{{ super() }}
-{{ moment.include_moment() }}
-{{ moment.locale('en') }}
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 {% endblock %}
 
 <!-- Navigation bar-->
@@ -48,7 +40,10 @@
             <ul class="nav navbar-nav navbar-right">
                 {% if current_user.is_authenticated %}
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Account <b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <!--Thumbnail image of the logged in user in the navigation bar -->
+                        <img src="{{ current_user.gravatar(size=18) }}">
+                        Account <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li><a href="{{ url_for('auth.change_password') }}">Change Password</a></li>
                         <li><a href="{{ url_for('auth.change_email_request') }}">Change Email</a></li>
@@ -77,4 +72,11 @@
     
     {% block page_content %}{% endblock %}
 </div>
+{% endblock %}
+
+<!-- Importing the Moment.js library -->
+{% block scripts %}
+{{ super() }}
+{{ moment.include_moment() }}
+{{ moment.locale('en') }}
 {% endblock %}
