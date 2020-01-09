@@ -20,3 +20,9 @@
     {{ macros.pagination_widget(pagination, '.index') }}
 </div>
 {% endblock %}
+
+<!-- Flask-PageDown template declaration -->
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}
