@@ -55,3 +55,8 @@ class PostForm(FlaskForm):
     # Change the TextAreaField to rich-text markdown PageDownField
     body = PageDownField("What's on your mind?", validators=[DataRequired()])
     submit = SubmitField('Submit')
+
+# Comment input form
+class CommentForm(FlaskForm):
+    body = StringField('', validators=[DataRequired()])
+    submit = SubmitField('Submit')
