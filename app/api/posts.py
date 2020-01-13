@@ -28,10 +28,10 @@ def get_posts():
         'count': pagination.total
     })
 
-@api.route('/posts/')
-def get_posts():
-    posts = Post.query.all()
-    return jsonify({'posts': [post.to_json() for post in posts] })
+#@api.route('/posts/')
+#def get_posts():
+#    posts = Post.query.all()
+#    return jsonify({'posts': [post.to_json() for post in posts] })
 
 @api.route('/posts/<int:id>')
 def get_post(id):
@@ -50,7 +50,7 @@ def new_post():
         {'location': url_for('api.get_post', id=post.id)}
 
 # PUT resource handler for posts (editing)
-@api.route('/posts/<init:id>', methods=['PUT'])
+@api.route('/posts/<int:id>', methods=['PUT'])
 @permission_required(Permission.WRITE)
 def edit_post(id):
     post = Post.query.get_or_404(id)

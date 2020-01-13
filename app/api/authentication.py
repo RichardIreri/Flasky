@@ -4,7 +4,7 @@ from . import api
 from flask_httpauth import HTTPBasicAuth
 from ..models import User
 from flask import g, jsonify
-from .errors import unauthorized, fobidden
+from .errors import unauthorized, forbidden
 
 auth = HTTPBasicAuth()  # Creating an object of class HTTPBasicAuth
 
@@ -26,14 +26,14 @@ def verify_password(email_or_token, passward):
     return user.verify_password(passward)
 
 # Flask-HTTPAuth error handler
-@auth.error_handler()
+@auth.error_handler
 def auth_error():
     return unauthorized('Invalid credentials')
 
-@api.route('/posts/')
-@auth.login_required
-def get_posts():
-    pass
+#@api.route('/posts/')
+#@auth.login_required
+#def get_posts():
+#    pass
 
 # Before_request handler with authentication
 @api.before_request
