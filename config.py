@@ -39,10 +39,11 @@ class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI =os.environ.get('DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'data.sqlite')
 
-# Registring configurations
+# Registering configurations
 config = {
     'development': DevelopmentConfig,
     'testing': TestingConfig,
     'production': ProductionConfig,
+
     'default': DevelopmentConfig
 }

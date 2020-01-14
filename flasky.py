@@ -10,18 +10,19 @@ if os.environ.get('FLASK_COVERAGE'):
     COV.start()
 
 from app import create_app, db
-from app.models import User, Role
+from app.models import User, Role, Follow, Permission, Post, Comment
 from flask_migrate import Migrate
 import sys
 import click
 
-app = create_app(os.getenv('FLASK_CONFIG') or 'default')
+app = create_app('testing')
 migrate = Migrate(app, db)
 
 # Creating an application context
 @app.shell_context_processor
 def make_shell_context():
-    return dict(db=db, User=User, Role=Role)
+    return dict(db=db, User=User, Role=Role, Follow=Follow,
+                Permission=Permission, Post=Post, Comment=Comment)
 
 # Coverage metrics
 @app.cli.command()

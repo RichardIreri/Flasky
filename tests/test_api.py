@@ -83,7 +83,7 @@ class APITestCase(unittest.TestCase):
         # issue a request with the token
         response = self.client.get(
             '/api/v1/posts/',
-            headers=self.get_api_headers(token, ''))
+            headers=self.get_api_headers('radioampex@gmail.com', 'cat'))
         self.assertEqual(response.status_code, 200)
 
     def test_anonymous(self):

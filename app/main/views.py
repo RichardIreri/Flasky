@@ -11,6 +11,17 @@ from flask_mail import Message
 from flask_login import login_required, current_user
 from ..decorators import admin_required, permission_required
 
+# Server shutdown route
+#@main.route('/shutdown')
+#def server_shutdown():
+#    if not current_app.testing:
+#        abort(404)
+#    shutdown = request.environ.get('werkzeug.server.shutdown')
+#    if not shutdown:
+#        abort(500)
+#    shutdown()
+#    return 'Shutting down...'
+    
 # Home page route with a blog post
 @main.route('/', methods=['GET', 'POST'])
 def index():
