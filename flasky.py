@@ -15,7 +15,7 @@ from flask_migrate import Migrate
 import sys
 import click
 
-app = create_app('testing')
+app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 migrate = Migrate(app, db)
 
 # Creating an application context
