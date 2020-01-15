@@ -10,7 +10,7 @@ from ..emails import send_email
 from flask_mail import Message
 from flask_login import login_required, current_user
 from ..decorators import admin_required, permission_required
-from flask_sqlalchemy import get_debug_queries@
+from flask_sqlalchemy import get_debug_queries
 
 # Server shutdown route
 #@main.route('/shutdown')

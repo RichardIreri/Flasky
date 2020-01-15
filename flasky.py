@@ -14,6 +14,7 @@ from app.models import User, Role, Follow, Permission, Post, Comment
 from flask_migrate import Migrate
 import sys
 import click
+from flask_migrate import upgrade
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 migrate = Migrate(app, db)
@@ -58,4 +59,18 @@ def profile(length, profile_dir):
     from werkzeug.contrib.profiler import ProfilerMiddleware
     app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions=[length],
                                         profile_dir=profile_dir)
-    app.run(debug=False)
+    if __name__ == "__main__":
+        app.run(debug=False)
+
+# Deplpoy command
+@app.cli.command()
+def deploy():
+    """ Run deployment task."""
+    # Migrate database to latest vertion.
+    upgrade()
+
+    # Create or update user roles
+    Role.insert_roles()
+
+    # Ensure all users are following themselves
+    User.add_self_follows()
