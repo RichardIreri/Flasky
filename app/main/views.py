@@ -43,7 +43,7 @@ def index():
     else:
         query = Post.query
     pagination = query.order_by(Post.timestamp.desc()).paginate(
-        page, per_page=current_app.config['FLASKY_POSTS_PER_PAGE'],
+        page, per_page=current_app.config['FLASKY_POSTS_PER_PAGE'])
         #error_out=False)
     posts = pagination.items
     return render_template('index.html', form=form, posts=posts,
