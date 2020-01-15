@@ -39,8 +39,5 @@ nosetests.xml
 *.sqlite
 
 # Virtual environment
-venv
-
-# Environment files
 .env
-.env-mysql
+venv
