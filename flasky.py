@@ -46,3 +46,16 @@ def test(coverage):
         COV.html_report(directory=covdir)
         print('HTML version: file://%s/index.html' % covdir)
         COV.erase()
+
+# Running the application under the request profiler
+@app.cli.command()
+@click.option('--length', default=25,
+            help='Number of functions to be included in the profiler report.')
+@click.option('--profile-dir', default=None,
+              help='Directory where profile data fils are saved')
+def profile(length, profile_dir):
+    """ Start the app under the code profiler."""
+    from werkzeug.contrib.profiler import ProfilerMiddleware
+    app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions=[length],
+                                        profile_dir=profile_dir)
+    app.run(debug=False)
