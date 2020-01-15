@@ -10,6 +10,7 @@ from ..emails import send_email
 from flask_mail import Message
 from flask_login import login_required, current_user
 from ..decorators import admin_required, permission_required
+from flask_sqlalchemy import get_debug_queries@
 
 # Server shutdown route
 #@main.route('/shutdown')
@@ -266,3 +267,14 @@ def show_followed():
     resp = make_response(redirect(url_for('.index')))
     resp.set_cookie('show_followed', '1', max_age=30*24*60*60) # 30 days
     return resp
+
+# Reporting slow database queries
+@main.after_app_request
+def after_request(response):
+    for query in get_debug_queries():
+        if query.duration >= current_app.config['FLASKY_SLOW_DB_QUERY_TIME']:
+            current_app.logger.warning(
+                'Slow query: %s\nParameters: %s\nDuration: %fs\nContext: %s\n' %
+                (query.statement, query.parameters, query.duration,
+                query.context))
+    return response
