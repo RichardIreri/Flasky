@@ -15,6 +15,7 @@ from flask_migrate import Migrate
 import sys
 import click
 from flask_migrate import upgrade
+from flask import manager
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 migrate = Migrate(app, db)
