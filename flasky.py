@@ -11,11 +11,9 @@ if os.environ.get('FLASK_COVERAGE'):
 
 from app import create_app, db
 from app.models import User, Role, Follow, Permission, Post, Comment
-from flask_migrate import Migrate
+from flask_migrate import Migrate, upgrade
 import sys
 import click
-from flask_migrate import upgrade
-from flask import manager
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 migrate = Migrate(app, db)
@@ -64,7 +62,7 @@ def profile(length, profile_dir):
         app.run(debug=False)
 
 # Deplpoy command
-@manager.command
+@app.cli.command()
 def deploy():
     """ Run deployment task."""
     # Migrate database to latest vertion.
