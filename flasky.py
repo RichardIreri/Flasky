@@ -58,10 +58,9 @@ def profile(length, profile_dir):
     from werkzeug.contrib.profiler import ProfilerMiddleware
     app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions=[length],
                                         profile_dir=profile_dir)
-    if __name__ == "__main__":
-        app.run(debug=False)
+    app.run()
 
-# Deplpoy command
+# Delpoy command
 @app.cli.command()
 def deploy():
     """ Run deployment task."""
