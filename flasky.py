@@ -18,6 +18,7 @@ from flask_script import Manager
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 migrate = Migrate(app, db)
+manager = Manager(app)
 
 # Creating an application context
 @app.shell_context_processor
@@ -62,7 +63,7 @@ def profile(length, profile_dir):
     app.run()
 
 # Deploy command
-@app.cli.command()
+@manager.command
 def deploy():
     """ Run deployment task."""
     # Migrate database to latest vertion.
